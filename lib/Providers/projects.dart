@@ -52,7 +52,7 @@ class Projects with ChangeNotifier {
     // if (_showFavoritesOnly) {
     //   return _items.where((prodItem) => prodItem.isFavorite).toList();
     // }
-    return items;
+    return _items;
   }
 
   

@@ -7,20 +7,12 @@ import 'package:provider/provider.dart';
 
 class ProjectList extends StatefulWidget
 {
-  @override
-  _ProjectListState createState() => _ProjectListState();
-}
-
-class _ProjectListState extends State<ProjectList> {
-  
-  List<Project> projdata;
   
   
-  void initState()
-  {
-    projdata= Provider.of<Projects>(context).items;
-    super.initState();
-  }
+ 
+  
+  
+  
   
   
   
@@ -30,16 +22,71 @@ class _ProjectListState extends State<ProjectList> {
   
   
   @override
+  _ProjectListState createState() => _ProjectListState();
+}
+
+class _ProjectListState extends State<ProjectList> {
+  Projects projects;
+  Future getList;
+  
+  void didChangeDependencies()
+  {
+    final projlist= Provider.of<Projects>(context);
+    
+    if(this.projects!=projlist){
+    this.projects=projlist;
+    
+    getList= projlist.fetchAndSetProducts();}
+    super.didChangeDependencies();
+  }
+  
+  @override
   Widget build(BuildContext context)
   {
+    List<Project> projdata= Provider.of<Projects>(context).items;
     
-    
-    
-    return ListView.builder(itemCount:projdata.length ,     itemBuilder: (BuildContext context,int index){
+    return FutureBuilder (
+        builder: (ctx, snapshot) => snapshot.connectionState ==
+                ConnectionState.waiting
+            ? Center(
+                child: CircularProgressIndicator(),
+              )
+            : Consumer<Projects>(
+                child: Center(
+                  child: const Text('No PROJECTS YET'),
+                ),
+                builder: (ctx, projList, ch) => projList.items.length <= 0
+                    ? ch
+                    : GridView.builder(
+                              itemCount:
+                                  Provider.of<Projects>(context).items.length,
+                              gridDelegate:
+                                  SliverGridDelegateWithFixedCrossAxisCount(
+                                crossAxisCount: 3,
+                                
+                                
+                              ),
+                        
+                        
+                        itemBuilder: (ctx, i){
 
 
-      return ProjectItem(projdata[index].id,projdata[index].title,projdata[index].duration,);
-    }
+
+                           return 
+                                                                   Container(
+                                        child: ProjectItem(
+                                      Provider.of<Projects>(context,listen: false).items[i].title,
+                                      Provider.of<Projects>(context,listen: false)
+                                          .items[i]
+                                          .title,Provider.of<Projects>(context,listen: false)
+                                          .items[i].duration,
+                                    ),);
+                        })),
+
+
+
+
+      future: getList,
     );
     }      
 }
