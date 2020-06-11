@@ -1,48 +1,148 @@
-
-
-import 'package:flutter/widgets.dart';
-import 'package:projq/Providers/projects.dart';
-
-
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:projq/Providers/projects.dart';
 import 'package:provider/provider.dart';
 
 class ProjectDetailScreen extends StatelessWidget {
+  static const routeName = '/proj_detail_screen';
   Widget build(BuildContext context) {
-    final projId = ModalRoute.of(context).settings.arguments as String;
-    final selectedproj = Provider.of<Projects>(context).findById(projId);
+    final id = ModalRoute.of(context).settings.arguments;
+    final selectedProject = Provider.of<Projects>(
+      context,
+    ).findById(id);
+
     return Scaffold(
-      appBar: AppBar(title: Text('${selectedproj.title}')),
-      body: Column(children: <Widget>[
-        Container(
-          height: 300,
-          width: double.infinity,
-          child: Image.network(selectedproj.imageUrl, fit: BoxFit.cover),
+        appBar: AppBar(
+          backgroundColor: Colors.indigo
+          ,title: Text(selectedProject.title),
+          actions: <Widget>[Icon(Icons.delete)],
         ),
-        Container(
-          margin: EdgeInsets.symmetric(vertical: 10),
-          child: Text(
-            'Ingredients',
-            style: Theme.of(context).textTheme.title,
-          ),
-        ),
-        Container(
-            decoration: BoxDecoration(
-                color: Colors.white,
-                border: Border.all(color: Colors.grey),
-                borderRadius: BorderRadius.circular(10)),
-            margin: EdgeInsets.all(10),
-            padding: EdgeInsets.all(10),
-            height: 100,
-            width: 300,
-            child: ListView.builder(
-              itemBuilder: (ctx, index) => Card(
-                color: Theme.of(context).accentColor,
-                child: Text(selectedproj.prequisites[index]),
+        body: Column(children: <Widget>[
+          Row(
+            children: <Widget>[
+              Container(
+                child: Card(
+                  child: Image.file(selectedProject.image),
+                  margin: EdgeInsets.all(8),
+                ),
+                height: 200,
+                width: 200,
               ),
-              itemCount: selectedproj.prequisites.length,
-            ))
-      ]),
-    );
+            SizedBox(width:20),
+            FloatingActionButton(onPressed: null,child: Icon(Icons.check_circle),)
+            ],
+          ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Column(
+              children: <Widget>[
+                Container(
+                  alignment: Alignment.topLeft,
+                  child: Row(
+                    children: <Widget>[SizedBox(width: 10,)
+                      ,
+                      Text('About the Project:',
+                          style: TextStyle(
+                              fontSize: 15,
+                              fontWeight: FontWeight.bold,
+                              fontStyle: FontStyle.italic)),
+                    ],
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Container(
+                    decoration: BoxDecoration(
+                        border: Border.all(width: 2),
+                        borderRadius: BorderRadius.all(Radius.circular(5))),
+                    alignment: Alignment.topLeft,
+                    child: Card(
+                      child: Text(selectedProject.description,
+                          style: TextStyle(
+                              fontSize: 10,
+                              fontWeight: FontWeight.normal,
+                              fontStyle: FontStyle.italic)),
+                      
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Column(
+              children: <Widget>[
+                Container(
+                  alignment: Alignment.topLeft,
+                  child: Row(
+                    children: <Widget>[SizedBox(width: 10,)
+                      ,
+                      Text('Prequisites:',
+                          style: TextStyle(
+                              fontSize: 15,
+                              fontWeight: FontWeight.bold,
+                              fontStyle: FontStyle.italic)),
+                    ],
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Container(
+                    decoration: BoxDecoration(
+                        border: Border.all(width: 2),
+                        borderRadius: BorderRadius.all(Radius.circular(5))),
+                    alignment: Alignment.topLeft,
+                    child: Card(
+                      child: Text(selectedProject.prequisites,
+                          style: TextStyle(
+                              fontSize: 10,
+                              fontWeight: FontWeight.normal,
+                              fontStyle: FontStyle.italic)),
+                      
+                    ),
+                  ),
+                ),
+              ],
+          ),
+            ),
+           Padding(
+             padding: const EdgeInsets.all(8.0),
+             child: Column(
+              children: <Widget>[
+                Container(
+                  alignment: Alignment.topLeft,
+                  child: Row(
+                    children: <Widget>[SizedBox(width: 10,)
+                      ,
+                      Text('Contact Info:',
+                          style: TextStyle(
+                              fontSize: 15,
+                              fontWeight: FontWeight.bold,
+                              fontStyle: FontStyle.italic)),
+                    ],
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Container(
+                    decoration: BoxDecoration(
+                        border: Border.all(width: 2),
+                        borderRadius: BorderRadius.all(Radius.circular(5))),
+                    alignment: Alignment.topLeft,
+                    child: Card(
+                      child: Text(selectedProject.contact,
+                          style: TextStyle(
+                              fontSize: 10,
+                              fontWeight: FontWeight.normal,
+                              fontStyle: FontStyle.italic)),
+                      
+                    ),
+                  ),
+                ),
+              ],
+          ),
+           ),
+        ]));
   }
 }

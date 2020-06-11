@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
@@ -8,7 +9,9 @@ class Project with ChangeNotifier {
   final String title;
   final String description;
   final String prequisites;
-  final String imageUrl;
+  final File image;
+  final String contact;
+  final String members;
   
   final String duration;
   final String affordability;
@@ -19,7 +22,9 @@ class Project with ChangeNotifier {
     @required this.title,
     @required this.description,
     @required this.prequisites,
-     this.imageUrl,
+    this.image,
+    this.contact,
+    this.members,
     
     this.duration,
     this.affordability,

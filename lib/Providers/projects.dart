@@ -8,42 +8,8 @@ import '../models/http_exception.dart';
 import './project.dart';
 
 class Projects with ChangeNotifier {
-  List<Project> _items;
-    // Product(
-    //   id: 'p1',
-    //   title: 'Red Shirt',
-    //   description: 'A red shirt - it is pretty red!',
-    //   price: 29.99,
-    //   imageUrl:
-    //       'https://cdn.pixabay.com/photo/2016/10/02/22/17/red-t-shirt-1710578_1280.jpg',
-    // ),
-    // Product(
-    //   id: 'p2',
-    //   title: 'Trousers',
-    //   description: 'A nice pair of trousers.',
-    //   price: 59.99,
-    //   imageUrl:
-    //       'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e8/Trousers%2C_dress_%28AM_1960.022-8%29.jpg/512px-Trousers%2C_dress_%28AM_1960.022-8%29.jpg',
-    // ),
-    // Product(
-    //   id: 'p3',
-    //   title: 'Yellow Scarf',
-    //   description: 'Warm and cozy - exactly what you need for the winter.',
-    //   price: 19.99,
-    //   imageUrl:
-    //       'https://live.staticflickr.com/4043/4438260868_cc79b3369d_z.jpg',
-    // ),
-    // Product(
-    //   id: 'p4',
-    //   title: 'A Pan',
-    //   description: 'Prepare any meal you want.',
-    //   price: 49.99,
-    //   imageUrl:
-    //       'https://upload.wikimedia.org/wikipedia/commons/thumb/1/14/Cast-Iron-Pan.jpg/1024px-Cast-Iron-Pan.jpg',
-    // ),
-  
-  // var _showFavoritesOnly = false;
-  final String authToken=null;
+  List<Project> _items=[];
+   final String authToken=null;
   final String userId=null;
 
   
@@ -60,21 +26,11 @@ class Projects with ChangeNotifier {
   Project findById(String id) {
     return _items.firstWhere((prod) => prod.id == id);
   }
-
-  // void showFavoritesOnly() {
-  //   _showFavoritesOnly = true;
-  //   notifyListeners();
-  // }
-
-  // void showAll() {
-  //   _showFavoritesOnly = false;
-  //   notifyListeners();
-  // }
-
+    
   Future<void> fetchAndSetProducts([bool filterByUser = false]) async {
     final filterString = filterByUser ? 'orderBy="creatorId"&equalTo="$userId"' : '';
     var url =
-        'https://projectmate-5c85c.firebaseio.com/projects.json?auth=$authToken&$filterString';
+        'https://projectmate-5c85c.firebaseio.com/abc/projects.json';
     try {
       final response = await http.get(url);
       final extractedData = json.decode(response.body) as Map<String, dynamic>;
@@ -82,7 +38,7 @@ class Projects with ChangeNotifier {
         return;
       }
       url =
-          'https://projectmate-5c85c.firebaseio.com/userFavorites/$userId.json?auth=$authToken';
+          'https://projectmate-5c85c.firebaseio.com/abc/projects.json';
       final favoriteResponse = await http.get(url);
       final favoriteData = json.decode(favoriteResponse.body);
       final List<Project> loadedProducts = [];
@@ -92,8 +48,10 @@ class Projects with ChangeNotifier {
           title: prodData['title'],
           description: prodData['description'],
           prequisites: prodData['prequisites'],
-          
-          imageUrl:null,
+          members: prodData['members'],
+          image:prodData['image'],
+          complexity: prodData['complexity'],
+          affordability: prodData['affordability'],
         ));
       });
       _items = loadedProducts;
@@ -105,50 +63,47 @@ class Projects with ChangeNotifier {
 
   Future<void> addProduct(Project project) async {
     final url =
-        'https://projectmate-5c85c.firebaseio.com/projects.json?auth=$authToken';
+        'https://projfire-d9f08.firebaseio.com/projects.json';
     
-      final response = await http.post(
+      http.post(
         url,
         body: json.encode({
           'title': project.title,
           'description': project.description,
-          'imageUrl': null,
+          'image': project.image,
           'prequisites': project.prequisites,
-          'creatorId': userId,
+          'duration': project.duration,
+          'complexity': project.complexity,
+          'affordability':project.affordability,
+          'id':project.id,
+          'contact':project.contact,
+          'members':project.members
+          
         }),
-      );
+      ).then((response){
+      
+      print(json.decode(response.body));
       final newProduct = Project(
         title: project.title,
         description: project.description,
         prequisites: project.prequisites,
-        imageUrl:null,
+        image:project.image,
         id: project.id,
-        duration: project.duration
+        duration: project.duration,
+        complexity: project.complexity,
+        affordability: project.affordability,
+        contact: project.contact,
+        members: project.members
+
       );
       _items.add(newProduct);
       // _items.insert(0, newProduct); // at the start of the list
       notifyListeners();
+      });
     
   }
 
-  Future<void> updateProduct(String id, Project newProject) async {
-    final prodIndex = _items.indexWhere((prod) => prod.id == id);
-    if (prodIndex >= 0) {
-      final url =
-          'https://projectmate-5c85c.firebaseio.com/products/$id.json?auth=$authToken';
-      await http.patch(url,
-          body: json.encode({
-            'title': newProject.title,
-            'description': newProject.description,
-            'imageUrl': newProject.imageUrl,
-            'price': newProject.prequisites
-          }));
-      _items[prodIndex] = newProject;
-      notifyListeners();
-    } else {
-      print('...');
-    }
-  }
+  
 
   Future<void> deleteProduct(String id) async {
     final url =

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:projq/Providers/projects.dart';
 import 'package:projq/screens/addproject.dart';
-
+import './screens/login_page.dart';
 
 import 'package:projq/screens/category_project_screen.dart';
 import 'package:projq/screens/proj_details_screen.dart';
@@ -31,11 +31,12 @@ class MyApp extends StatelessWidget {
         builder: (ctx, auth, _) => MaterialApp(
       title: 'Flutter Demo',
       
+      
       home: TabsScreen(),
       routes: {
         
-        '/project_details_screen': (ctx)=> ProjectDetailScreen(),
-        '/proj_add_screen': (ctx)=> AddProject(),
+        '/proj_detail_screen':(ctx)=>ProjectDetailScreen(),
+       '/proj_add_screen': (ctx)=> AddProject(),
       },
     )));
   }

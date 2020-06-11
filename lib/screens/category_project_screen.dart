@@ -43,7 +43,7 @@ class _ProjectListState extends State<ProjectList> {
   @override
   Widget build(BuildContext context)
   {
-    List<Project> projdata= Provider.of<Projects>(context).items;
+    
     
     return FutureBuilder (
         builder: (ctx, snapshot) => snapshot.connectionState ==
@@ -57,31 +57,43 @@ class _ProjectListState extends State<ProjectList> {
                 ),
                 builder: (ctx, projList, ch) => projList.items.length <= 0
                     ? ch
-                    : GridView.builder(
-                              itemCount:
-                                  Provider.of<Projects>(context).items.length,
-                              gridDelegate:
-                                  SliverGridDelegateWithFixedCrossAxisCount(
-                                crossAxisCount: 3,
+                    : Container(
+                      height: 300.0, // Change as per your requirement
+      width: 300.0,
+                      
+                      child: ListView.builder(
                                 
+      
                                 
-                              ),
-                        
-                        
-                        itemBuilder: (ctx, i){
+                                itemCount:
+                                    Provider.of<Projects>(context).items.length,
+                                
+                          
+                          
+                          itemBuilder: (ctx, i){
 
 
 
-                           return 
-                                                                   Container(
-                                        child: ProjectItem(
-                                      Provider.of<Projects>(context,listen: false).items[i].title,
-                                      Provider.of<Projects>(context,listen: false)
-                                          .items[i]
-                                          .title,Provider.of<Projects>(context,listen: false)
-                                          .items[i].duration,
-                                    ),);
-                        })),
+                             return 
+                                                                     Container(
+                                          child: ProjectItem(
+                                        Provider.of<Projects>(context,listen: false).items[i].id,
+                                        Provider.of<Projects>(context,listen: false)
+                                            .items[i]
+                                            .title,Provider.of<Projects>(context,listen: false)
+                                            .items[i].duration,
+                                            Provider.of<Projects>(context,listen: false)
+                                            .items[i].image,
+                                            Provider.of<Projects>(context,listen: false)
+                                            .items[i].complexity,
+                                            Provider.of<Projects>(context,listen: false)
+                                            .items[i].affordability,
+
+                                            Provider.of<Projects>(context,listen: false)
+                                            .items[i].members
+                                      ),);
+                          }),
+                    )),
 
 
 

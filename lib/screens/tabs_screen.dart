@@ -36,6 +36,8 @@ class _TabsScreenState extends State<TabsScreen> {
       // initialIndex: 0,
       child: Scaffold(
         appBar: AppBar(
+          backgroundColor: Colors.indigo
+          ,
           actions: <Widget>[IconButton(icon:Icon(Icons.add),onPressed:() {Navigator.of(context).pushNamed(AddProject.routeName);})],
           title: Text('ProjectMate'),
           bottom: TabBar(
