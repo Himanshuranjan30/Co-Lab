@@ -1,11 +1,16 @@
 import 'dart:io';
+
 import 'package:dropdown_formfield/dropdown_formfield.dart';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:projq/Providers/projects.dart';
-import 'package:provider/provider.dart';
+
+
+
 import '../Providers/project.dart';
 import '../widgets/image_input.dart';
+import '../services/database.dart';
+
 
 class AddProject extends StatefulWidget {
   static const routeName = '/proj_add_screen';
@@ -20,17 +25,8 @@ class _AddProjectState extends State<AddProject> {
   void _selectImage(File pickedImage) {
     _pickedImage = pickedImage;
   }
-
-  String _myActivity;
-  String _myActivity1;
-  final proj_nameController = TextEditingController();
-  final proj_desciption = TextEditingController();
-  final proj_membersno = TextEditingController();
-  final proj_skillscontroller = TextEditingController();
-  final proj_duration = TextEditingController();
-  final proj_contactinfo = TextEditingController();
-
-  void onSave() {
+  var databaseService= new DatabaseService();
+  void adddata() async {
     Project savedproj = Project(
       id: DateTime.now().toString(),
       title: proj_nameController.text,
@@ -44,8 +40,17 @@ class _AddProjectState extends State<AddProject> {
       members: proj_membersno.text,
     );
 
-    Provider.of<Projects>(context, listen: false).addProduct(savedproj);
+      databaseService.updateUserData(savedproj);
   }
+
+  String _myActivity;
+  String _myActivity1;
+  final proj_nameController = TextEditingController();
+  final proj_desciption = TextEditingController();
+  final proj_membersno = TextEditingController();
+  final proj_skillscontroller = TextEditingController();
+  final proj_duration = TextEditingController();
+  final proj_contactinfo = TextEditingController();
 
   Widget build(BuildContext context) {
     return Scaffold(
@@ -58,14 +63,14 @@ class _AddProjectState extends State<AddProject> {
                 Icons.save,
               ),
               onPressed: () {
-                onSave();
+                adddata();
                 Navigator.pop(context);
               })
         ],
       ),
       body: SingleChildScrollView(
         child: Expanded(
-                  child: Column(children: <Widget>[
+          child: Column(children: <Widget>[
             TextFormField(
               decoration: const InputDecoration(
                   icon: Icon(Icons.book), labelText: 'Project Name'),
@@ -108,7 +113,9 @@ class _AddProjectState extends State<AddProject> {
             ),
             Row(
               children: <Widget>[
-                SizedBox(width:5),Icon(Icons.image),Expanded(child: ImageInput(_selectImage)),
+                SizedBox(width: 5),
+                Icon(Icons.image),
+                Expanded(child: ImageInput(_selectImage)),
               ],
             ),
             SizedBox(

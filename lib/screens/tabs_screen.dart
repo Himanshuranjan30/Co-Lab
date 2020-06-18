@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 
 
 import './favorites_screen.dart';
-import '../widgets/proj_item.dart';
+
 import './category_project_screen.dart';
 import './addproject.dart';
+
+import '../services/auth.dart';
 
 
 
@@ -15,6 +17,7 @@ class TabsScreen extends StatefulWidget {
   
   @override
   _TabsScreenState createState() => _TabsScreenState();
+  
 }
 
 class _TabsScreenState extends State<TabsScreen> {
@@ -29,7 +32,7 @@ class _TabsScreenState extends State<TabsScreen> {
     
     
     
-    
+    final AuthService _auth = AuthService();
     
     return DefaultTabController(
       length: 2,
@@ -38,7 +41,8 @@ class _TabsScreenState extends State<TabsScreen> {
         appBar: AppBar(
           backgroundColor: Colors.indigo
           ,
-          actions: <Widget>[IconButton(icon:Icon(Icons.add),onPressed:() {Navigator.of(context).pushNamed(AddProject.routeName);})],
+          actions: <Widget>[IconButton(icon:Icon(Icons.add),onPressed:() {Navigator.of(context).pushNamed(AddProject.routeName);},),FlatButton.icon(icon: Icon(Icons.people),onPressed: () async {
+                await _auth.signOut();},label: Text('LogOut'),)],
           title: Text('ProjectMate'),
           bottom: TabBar(
             tabs: <Widget>[

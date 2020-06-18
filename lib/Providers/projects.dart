@@ -28,38 +28,14 @@ class Projects with ChangeNotifier {
   }
     
   Future<void> fetchAndSetProducts([bool filterByUser = false]) async {
-    final filterString = filterByUser ? 'orderBy="creatorId"&equalTo="$userId"' : '';
-    var url =
-        'https://projectmate-5c85c.firebaseio.com/abc/projects.json';
-    try {
-      final response = await http.get(url);
-      final extractedData = json.decode(response.body) as Map<String, dynamic>;
-      if (extractedData == null) {
-        return;
-      }
-      url =
-          'https://projectmate-5c85c.firebaseio.com/abc/projects.json';
-      final favoriteResponse = await http.get(url);
-      final favoriteData = json.decode(favoriteResponse.body);
+    
       final List<Project> loadedProducts = [];
-      extractedData.forEach((prodId, prodData) {
-        loadedProducts.add(Project(
-          id: prodId,
-          title: prodData['title'],
-          description: prodData['description'],
-          prequisites: prodData['prequisites'],
-          members: prodData['members'],
-          image:prodData['image'],
-          complexity: prodData['complexity'],
-          affordability: prodData['affordability'],
-        ));
-      });
+      
       _items = loadedProducts;
       notifyListeners();
-    } catch (error) {
-      throw (error);
-    }
-  }
+    } 
+    
+  
 
   Future<void> addProduct(Project project) async {
     final url =
