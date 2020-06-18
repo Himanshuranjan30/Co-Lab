@@ -1,16 +1,15 @@
 import 'dart:io';
 
 import 'package:dropdown_formfield/dropdown_formfield.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-
-
+import 'package:path/path.dart';
 import '../Providers/project.dart';
 import '../widgets/image_input.dart';
 import '../services/database.dart';
-
 
 class AddProject extends StatefulWidget {
   static const routeName = '/proj_add_screen';
@@ -22,10 +21,20 @@ class AddProject extends StatefulWidget {
 class _AddProjectState extends State<AddProject> {
   File _pickedImage;
 
+  String filename;
+
   void _selectImage(File pickedImage) {
     _pickedImage = pickedImage;
   }
-  var databaseService= new DatabaseService();
+
+  String fetchImage() {
+    FirebaseStorage storage =
+         FirebaseStorage(storageBucket: 'gs://projfire-d9f08.appspot.com/');
+    StorageReference imageLink = storage.ref().child(_pickedImage.path);
+    return imageLink.getDownloadURL().toString();
+  }
+
+  var databaseService = new DatabaseService();
   void adddata() async {
     Project savedproj = Project(
       id: DateTime.now().toString(),
@@ -40,7 +49,7 @@ class _AddProjectState extends State<AddProject> {
       members: proj_membersno.text,
     );
 
-      databaseService.updateUserData(savedproj);
+    databaseService.updateUserData(savedproj);
   }
 
   String _myActivity;
@@ -51,6 +60,8 @@ class _AddProjectState extends State<AddProject> {
   final proj_skillscontroller = TextEditingController();
   final proj_duration = TextEditingController();
   final proj_contactinfo = TextEditingController();
+
+  String filepath;
 
   Widget build(BuildContext context) {
     return Scaffold(
@@ -187,5 +198,10 @@ class _AddProjectState extends State<AddProject> {
         ),
       ),
     );
+  }
+
+  String returnPath() {
+    filepath = basename(_pickedImage.path);
+    return filepath;
   }
 }
