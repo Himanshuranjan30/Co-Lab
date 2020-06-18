@@ -5,6 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import 'package:projq/services/database.dart';
+import 'package:projq/widgets/proj_item.dart';
 
 
 class ProjectList extends StatefulWidget {
@@ -34,9 +35,13 @@ class _ProjectListState extends State<ProjectList> {
 
          if(!snapshot.hasData)
          return Text('data is loading');
-         return Center(child: Text(snapshot.data.documents[0]['title']),);
-       }
-    );}
+         return ListView.builder(itemBuilder: (ctx,index){
+          return ProjectItem(id:snapshot.data.documents[index]['id'],title: snapshot.data.documents[index]['title'],members: snapshot.data.documents[index]['members'],complexity: snapshot.data.documents[index]['complexity'],affordability: snapshot.data.documents[index]['affordability'],duration: snapshot.data.documents[index]['duration'],);
+
+         },
+         itemCount: snapshot.data.documents.length,
+       );
+  });}
       
      
 

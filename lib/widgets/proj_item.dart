@@ -6,14 +6,21 @@ import 'package:flutter/rendering.dart';
 import 'package:projq/Providers/project.dart';
 
 class ProjectItem extends StatelessWidget {
-  final Project project;
-  ProjectItem({this.project});
+  final String id;
+  final String title;
+  final String duration;
+  final String complexity;
+  final String affordability;
+  final String members;
+   ProjectItem({this.id,this.title,this.members,this.complexity,this.affordability,this.duration});
+
+  
 
   Widget build(BuildContext context) {
     return SingleChildScrollView(
         child: InkWell(
       
-      onTap:()=> Navigator.of(context).pushNamed('/proj_detail_screen',arguments:project.id),
+      onTap:()=> Navigator.of(context).pushNamed('/proj_detail_screen',arguments:id),
       child: Card(
         margin: EdgeInsets.all(8),
         color: Colors.white,
@@ -41,7 +48,7 @@ class ProjectItem extends StatelessWidget {
                     Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Text(
-                        project.title,
+                        title,
                         style: TextStyle(
                             fontWeight: FontWeight.bold,
                             color: Colors.black,
@@ -51,7 +58,7 @@ class ProjectItem extends StatelessWidget {
                     Row(
                       children: <Widget>[
                         Icon(Icons.people),
-                      Text(project.members,style: TextStyle(
+                      Text(members,style: TextStyle(
                               fontWeight: FontWeight.bold,
                               color: Colors.black,))
                       ],
@@ -64,21 +71,21 @@ class ProjectItem extends StatelessWidget {
                         Row(children: <Widget>[
                           Icon(Icons.timer),
                           Text(
-                            project.duration,
+                            duration,
                             style: TextStyle(
                               fontWeight: FontWeight.bold,
                               color: Colors.black,
                             ),
                           ),
                           Icon(Icons.assignment_late),
-                          Text(project.complexity,
+                          Text(complexity,
                               style: TextStyle(
                                 fontWeight: FontWeight.bold,
                                 color: Colors.black,
                               )),
 
                               Icon(Icons.attach_money),
-                              Text(project.affordability,style: TextStyle(
+                              Text(affordability,style: TextStyle(
                               fontWeight: FontWeight.bold,
                               color: Colors.black,))
                         ])
