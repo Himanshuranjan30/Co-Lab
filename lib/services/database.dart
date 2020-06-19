@@ -11,24 +11,17 @@ import 'package:projq/screens/addproject.dart';
 import 'package:projq/screens/category_project_screen.dart';
 import 'package:projq/widgets/image_input.dart';
 
-
-class DatabaseService extends ChangeNotifier{
- 
+class DatabaseService {
   final firestoreInstance = Firestore.instance;
   // collection reference
   String uid;
   String fileName;
-  
-  String downloadUrl;
-  
-  var addproj= new AddProject();
- StorageTaskSnapshot taskSnapshot;
- 
- 
- 
-  Future<String> updateUserData(Project project) async {
-    
-    
+  var addproj = new AddProject();
+  String photourl = '';
+
+  StorageTaskSnapshot storageTaskSnapshot;
+
+  Future updateUserData(Project project) async {
     firestoreInstance.collection('projects').add(
       {
         'id': project.id,
@@ -40,26 +33,21 @@ class DatabaseService extends ChangeNotifier{
         'affordability': project.affordability,
         'prequisites': project.prequisites,
         'contact': project.contact,
-        
       },
     );
 
      fileName = basename(project.image.path);
     StorageReference firebaseStorageRef =
-        
         FirebaseStorage.instance.ref().child(fileName);
     StorageUploadTask uploadTask = firebaseStorageRef.putFile(project.image);
-    taskSnapshot=await uploadTask.onComplete;
-    downloadUrl =  taskSnapshot.ref.getDownloadURL().toString();
-        return downloadUrl;
+    storageTaskSnapshot = await uploadTask.onComplete;
+    photourl = storageTaskSnapshot.ref.getDownloadURL().toString();
   }
-   
-   String returnUrl(){
-     return downloadUrl;
-   }  
-    
 
-
+  String returnUrl() {
+    //You probably don't need this now, as you can access downloadURL directly.
+    return photourl;
+  }
 
   List<Project> fetchProjects(QuerySnapshot snapshot) {
     return snapshot.documents.map((e) {
@@ -79,13 +67,9 @@ class DatabaseService extends ChangeNotifier{
   // get brews stream
   //
   Stream<List<Project>> get projects {
-    var firebaseUser =  FirebaseAuth.instance.currentUser();
+    var firebaseUser = FirebaseAuth.instance.currentUser();
     final CollectionReference projectCollection =
-      Firestore.instance.collection('projects');
+        Firestore.instance.collection('projects');
     return projectCollection.snapshots().map(fetchProjects);
   }
-
-
-
-
 }

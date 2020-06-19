@@ -7,6 +7,7 @@ import 'package:projq/Providers/project.dart';
 import 'package:path/path.dart';
 import 'package:projq/screens/addproject.dart';
 import 'package:projq/services/database.dart';
+import 'package:provider/provider.dart';
 class ProjectItem extends StatelessWidget {
   final String id;
   final String title;
@@ -22,7 +23,8 @@ class ProjectItem extends StatelessWidget {
    
    ProjectItem({this.id,this.title,this.members,this.complexity,this.affordability,this.duration,});
   
-   var database= DatabaseService();
+   
+  var database= new DatabaseService();
   
    
   
@@ -42,12 +44,12 @@ class ProjectItem extends StatelessWidget {
               SizedBox(width: 10),
               
               
-              
+              Text(database.photourl),
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(8.0),
-                  child: Image.network(database.returnUrl().toString()
+                  child: Image.network(database.photourl
                       ,
                       height: 100,
                       width: 80,
