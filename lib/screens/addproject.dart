@@ -5,52 +5,142 @@ import 'package:firebase_storage/firebase_storage.dart';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'dart:io';
+
+import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:path/path.dart' as path;
+import 'package:path_provider/path_provider.dart' as syspaths;
 
 import 'package:path/path.dart';
 import '../Providers/project.dart';
 import '../widgets/image_input.dart';
 import '../services/database.dart';
 
+
+
+class ImageInput extends StatefulWidget {
+  final Function onSelectImage;
+
+  ImageInput(this.onSelectImage);
+
+  @override
+  ImageInputState createState() => ImageInputState();
+}
+
+class ImageInputState extends State<ImageInput> {
+  File _storedImage;
+
+  
+  
+  
+  Future<void> _takePicture() async {
+    final imageFile = await ImagePicker.pickImage(
+      source: ImageSource.camera,
+      maxWidth: 600,
+    );
+    if (imageFile == null) {
+      return;
+    }
+    setState(() {
+      _storedImage = imageFile;
+    });
+    final appDir = await syspaths.getApplicationDocumentsDirectory();
+    final fileName = path.basename(imageFile.path);
+    final savedImage = await imageFile.copy('${appDir.path}/$fileName');
+    widget.onSelectImage(savedImage);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: <Widget>[
+        Container(
+          width: 150,
+          height: 100,
+          decoration: BoxDecoration(
+            border: Border.all(width: 1, color: Colors.grey),
+          ),
+          child: _storedImage != null
+              ? Image.file(
+                  _storedImage,
+                  fit: BoxFit.cover,
+                  width: double.infinity,
+                )
+              : Text(
+                  'No Image Taken',
+                  textAlign: TextAlign.center,
+                ),
+          alignment: Alignment.center,
+        ),
+        SizedBox(
+          width: 10,
+        ),
+        Expanded(
+          child: FlatButton.icon(
+            icon: Icon(Icons.camera),
+            label: Text('Take Picture'),
+            textColor: Theme.of(context).primaryColor,
+            onPressed: _takePicture,
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+
+
+
+
+
+
+
 class AddProject extends StatefulWidget {
   static const routeName = '/proj_add_screen';
 
   @override
-  _AddProjectState createState() => _AddProjectState();
+  AddProjectState createState() => AddProjectState();
+
+  returnUrl() {}
 }
 
-class _AddProjectState extends State<AddProject> {
-  File _pickedImage;
+class AddProjectState extends State<AddProject> {
+  static File pickedImage;
 
   String filename;
 
-  void _selectImage(File pickedImage) {
-    _pickedImage = pickedImage;
+  void selectImage(File pickedImage) {
+    pickedImage = pickedImage;
+    
   }
-
-  String fetchImage() {
-    FirebaseStorage storage =
-         FirebaseStorage(storageBucket: 'gs://projfire-d9f08.appspot.com/');
-    StorageReference imageLink = storage.ref().child(_pickedImage.path);
-    return imageLink.getDownloadURL().toString();
-  }
-
+  
+ 
+  
+  
+  
   var databaseService = new DatabaseService();
-  void adddata() async {
+  void adddata() async{
+    
+    
     Project savedproj = Project(
       id: DateTime.now().toString(),
       title: proj_nameController.text,
       description: proj_desciption.text,
       prequisites: proj_skillscontroller.text,
       duration: proj_duration.text,
-      image: _pickedImage,
+      image: pickedImage,
       complexity: _myActivity,
       affordability: _myActivity1,
       contact: proj_contactinfo.text,
       members: proj_membersno.text,
     );
 
-    databaseService.updateUserData(savedproj);
+     await databaseService.updateUserData(savedproj);
+    
   }
+
+ 
 
   String _myActivity;
   String _myActivity1;
@@ -61,7 +151,7 @@ class _AddProjectState extends State<AddProject> {
   final proj_duration = TextEditingController();
   final proj_contactinfo = TextEditingController();
 
-  String filepath;
+  
 
   Widget build(BuildContext context) {
     return Scaffold(
@@ -126,7 +216,7 @@ class _AddProjectState extends State<AddProject> {
               children: <Widget>[
                 SizedBox(width: 5),
                 Icon(Icons.image),
-                Expanded(child: ImageInput(_selectImage)),
+                Expanded(child: ImageInput(selectImage)),
               ],
             ),
             SizedBox(
@@ -200,8 +290,8 @@ class _AddProjectState extends State<AddProject> {
     );
   }
 
-  String returnPath() {
-    filepath = basename(_pickedImage.path);
-    return filepath;
+  
   }
-}
+
+
+  

@@ -4,7 +4,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:projq/Providers/project.dart';
-
+import 'package:path/path.dart';
+import 'package:projq/screens/addproject.dart';
+import 'package:projq/services/database.dart';
 class ProjectItem extends StatelessWidget {
   final String id;
   final String title;
@@ -12,10 +14,20 @@ class ProjectItem extends StatelessWidget {
   final String complexity;
   final String affordability;
   final String members;
-   ProjectItem({this.id,this.title,this.members,this.complexity,this.affordability,this.duration});
-
   
-
+  
+  
+   
+  
+   
+   ProjectItem({this.id,this.title,this.members,this.complexity,this.affordability,this.duration,});
+  
+   var database= DatabaseService();
+  
+   
+  
+    
+  
   Widget build(BuildContext context) {
     return SingleChildScrollView(
         child: InkWell(
@@ -28,12 +40,15 @@ class ProjectItem extends StatelessWidget {
                   Row(
             children: <Widget>[
               SizedBox(width: 10),
+              
+              
+              
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(8.0),
-                  child: Image.network(
-                      'https://www.bensound.com/bensound-img/hey.jpg',
+                  child: Image.network(database.returnUrl().toString()
+                      ,
                       height: 100,
                       width: 80,
                       fit: BoxFit.cover,
