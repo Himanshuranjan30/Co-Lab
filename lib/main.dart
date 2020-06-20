@@ -20,6 +20,7 @@ class MyApp extends StatelessWidget {
           ChangeNotifierProvider.value(value: Projects()),
           StreamProvider.value(value: AuthService().user),
           StreamProvider<List<Project>>.value(value: DatabaseService().projects),
+          ChangeNotifierProvider.value(value: DatabaseService(),),
           
           
         ],

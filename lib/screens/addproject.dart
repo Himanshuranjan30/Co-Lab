@@ -13,6 +13,7 @@ import 'package:path/path.dart' as path;
 import 'package:path_provider/path_provider.dart' as syspaths;
 
 import 'package:path/path.dart';
+import 'package:provider/provider.dart';
 import '../Providers/project.dart';
 import '../widgets/image_input.dart';
 import '../services/database.dart';
@@ -33,9 +34,24 @@ class AddProjectState extends State<AddProject> {
     _pickedImage = pickedImage;
   }
 
-  var databaseService = new DatabaseService();
-  void adddata() async {
-    Project savedproj = Project(
+  
+  
+    Project finalproj;
+    
+  
+
+  String _myActivity;
+  String _myActivity1;
+  final proj_nameController = TextEditingController();
+  final proj_desciption = TextEditingController();
+  final proj_membersno = TextEditingController();
+  final proj_skillscontroller = TextEditingController();
+  final proj_duration = TextEditingController();
+  final proj_contactinfo = TextEditingController();
+
+  
+  Project returnproj(){
+  Project savedproj = Project(
       id: DateTime.now().toString(),
       title: proj_nameController.text,
       description: proj_desciption.text,
@@ -47,18 +63,10 @@ class AddProjectState extends State<AddProject> {
       contact: proj_contactinfo.text,
       members: proj_membersno.text,
     );
+    return savedproj;
+    
+    }
 
-    await databaseService.updateUserData(savedproj);
-  }
-
-  String _myActivity;
-  String _myActivity1;
-  final proj_nameController = TextEditingController();
-  final proj_desciption = TextEditingController();
-  final proj_membersno = TextEditingController();
-  final proj_skillscontroller = TextEditingController();
-  final proj_duration = TextEditingController();
-  final proj_contactinfo = TextEditingController();
 
   Widget build(BuildContext context) {
     return Scaffold(
@@ -71,7 +79,8 @@ class AddProjectState extends State<AddProject> {
                 Icons.save,
               ),
               onPressed: () {
-                adddata();
+                finalproj=returnproj();
+                 Provider.of<DatabaseService>(context,listen: true).updateUserData(finalproj);
                 Navigator.pop(context);
               })
         ],

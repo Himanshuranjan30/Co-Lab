@@ -11,17 +11,17 @@ import 'package:projq/screens/addproject.dart';
 import 'package:projq/screens/category_project_screen.dart';
 import 'package:projq/widgets/image_input.dart';
 
-class DatabaseService {
+class DatabaseService extends ChangeNotifier{
   final firestoreInstance = Firestore.instance;
   // collection reference
   String uid;
   String fileName;
   var addproj = new AddProject();
-  String photourl = '';
 
+   String url='';
   StorageTaskSnapshot storageTaskSnapshot;
 
-  Future updateUserData(Project project) async {
+  Future<Project> updateUserData(Project project) async {
     firestoreInstance.collection('projects').add(
       {
         'id': project.id,
@@ -40,14 +40,15 @@ class DatabaseService {
     StorageReference firebaseStorageRef =
         FirebaseStorage.instance.ref().child(fileName);
     StorageUploadTask uploadTask = firebaseStorageRef.putFile(project.image);
-    storageTaskSnapshot = await uploadTask.onComplete;
-    photourl = storageTaskSnapshot.ref.getDownloadURL().toString();
+    
+     
+    String photourl =  await (await uploadTask.onComplete).ref.getDownloadURL();
+    url= photourl.toString();
+    notifyListeners();
+    
   }
 
-  String returnUrl() {
-    //You probably don't need this now, as you can access downloadURL directly.
-    return photourl;
-  }
+  
 
   List<Project> fetchProjects(QuerySnapshot snapshot) {
     return snapshot.documents.map((e) {
