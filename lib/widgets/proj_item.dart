@@ -15,13 +15,14 @@ class ProjectItem extends StatelessWidget {
   final String complexity;
   final String affordability;
   final String members;
+  final String docid;
   
   
   
    
   
    
-   ProjectItem({this.id,this.title,this.members,this.complexity,this.affordability,this.duration,});
+   ProjectItem({this.id,this.title,this.members,this.complexity,this.affordability,this.duration,this.docid});
   
    
   
@@ -34,7 +35,7 @@ class ProjectItem extends StatelessWidget {
     return SingleChildScrollView(
         child: InkWell(
       
-      onTap:()=> Navigator.of(context).pushNamed('/proj_detail_screen',arguments:id),
+      onTap:()=> Navigator.of(context).pushNamed('/proj_detail_screen',arguments:docid),
       child: Card(
         margin: EdgeInsets.all(8),
         color: Colors.white,
@@ -42,6 +43,7 @@ class ProjectItem extends StatelessWidget {
                   Row(
             children: <Widget>[
               SizedBox(width: 10),
+              
               
               
             

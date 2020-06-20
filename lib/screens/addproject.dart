@@ -80,7 +80,7 @@ class AddProjectState extends State<AddProject> {
               ),
               onPressed: () {
                 finalproj=returnproj();
-                 Provider.of<DatabaseService>(context,listen: true).updateUserData(finalproj);
+                 Provider.of<DatabaseService>(context,listen: false).updateUserData(finalproj);
                 Navigator.pop(context);
               })
         ],

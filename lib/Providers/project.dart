@@ -7,11 +7,11 @@ import 'package:flutter/foundation.dart';
 
 class Project with ChangeNotifier {
   final String id;
-  final String title;
-  final String description;
-  final String prequisites;
+   String title;
+   String description;
+   String prequisites;
   final File image;
-  final String contact;
+ String contact;
   final String members;
   
   final String duration;

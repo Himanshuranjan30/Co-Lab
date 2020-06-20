@@ -1,20 +1,43 @@
+
+
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:projq/Providers/project.dart';
 import 'package:projq/Providers/projects.dart';
 import 'package:provider/provider.dart';
 
 class ProjectDetailScreen extends StatelessWidget {
   static const routeName = '/proj_detail_screen';
+  String id;
+    Project selectedproj;
+  Future<void> fetchproject(String groupId) async {
+    
+        await Firestore.instance.collection("projects").document(id).get().then((doc) => {selectedproj.description=doc.data['description'],
+        selectedproj.prequisites=doc.data['prequisites'],selectedproj.contact= doc.data['contact'],});
+        
+        
+        
+        
+        
+        
+        
+      
+    }
+  
+  
+  
+  
+  
   Widget build(BuildContext context) {
-    final id = ModalRoute.of(context).settings.arguments;
-    final selectedProject = Provider.of<Projects>(
-      context,
-    ).findById(id);
+     id = ModalRoute.of(context).settings.arguments;
+     fetchproject(id);
+    
 
     return Scaffold(
         appBar: AppBar(
           backgroundColor: Colors.indigo
-          ,title: Text(selectedProject.title),
+          ,title: Text(selectedproj.title),
           actions: <Widget>[Icon(Icons.delete)],
         ),
         body: Column(children: <Widget>[
@@ -22,7 +45,7 @@ class ProjectDetailScreen extends StatelessWidget {
             children: <Widget>[
               Container(
                 child: Card(
-                  child: Image.file(selectedProject.image),
+                  child: Image.file(selectedproj.image),
                   margin: EdgeInsets.all(8),
                 ),
                 height: 200,
@@ -57,7 +80,7 @@ class ProjectDetailScreen extends StatelessWidget {
                         borderRadius: BorderRadius.all(Radius.circular(5))),
                     alignment: Alignment.topLeft,
                     child: Card(
-                      child: Text(selectedProject.description,
+                      child: Text(selectedproj.description,
                           style: TextStyle(
                               fontSize: 10,
                               fontWeight: FontWeight.normal,
@@ -94,7 +117,7 @@ class ProjectDetailScreen extends StatelessWidget {
                         borderRadius: BorderRadius.all(Radius.circular(5))),
                     alignment: Alignment.topLeft,
                     child: Card(
-                      child: Text(selectedProject.prequisites,
+                      child: Text(selectedproj.prequisites,
                           style: TextStyle(
                               fontSize: 10,
                               fontWeight: FontWeight.normal,
@@ -131,7 +154,7 @@ class ProjectDetailScreen extends StatelessWidget {
                         borderRadius: BorderRadius.all(Radius.circular(5))),
                     alignment: Alignment.topLeft,
                     child: Card(
-                      child: Text(selectedProject.contact,
+                      child: Text(selectedproj.contact,
                           style: TextStyle(
                               fontSize: 10,
                               fontWeight: FontWeight.normal,
