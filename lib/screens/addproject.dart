@@ -13,6 +13,7 @@ import 'package:path/path.dart' as path;
 import 'package:path_provider/path_provider.dart' as syspaths;
 
 import 'package:path/path.dart';
+import 'package:projq/shared/loading.dart';
 import 'package:provider/provider.dart';
 import '../Providers/project.dart';
 import '../widgets/image_input.dart';
@@ -37,6 +38,7 @@ class AddProjectState extends State<AddProject> {
   
   
     Project finalproj;
+    
     
   
 
@@ -78,9 +80,11 @@ class AddProjectState extends State<AddProject> {
               icon: Icon(
                 Icons.save,
               ),
-              onPressed: () {
+              onPressed: () async {
                 finalproj=returnproj();
-                 Provider.of<DatabaseService>(context,listen: false).updateUserData(finalproj);
+                 await Provider.of<DatabaseService>(context,listen: false).updateUserData(finalproj);
+                 Loading();
+                 Provider.of<DatabaseService>(context,listen: false).updatedata();
                 Navigator.pop(context);
               })
         ],

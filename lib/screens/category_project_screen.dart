@@ -1,6 +1,7 @@
 
 
-import 'dart:html';
+
+
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 
@@ -36,6 +37,8 @@ class _ProjectListState extends State<ProjectList> {
                 affordability: snapshot.data.documents[index]['affordability'],
                 duration: snapshot.data.documents[index]['duration'],
                 docid: snapshot.data.documents[index].documentID,
+                imageurl: snapshot.data.documents[index]['imageurl']
+          ,
                 
                 
               );

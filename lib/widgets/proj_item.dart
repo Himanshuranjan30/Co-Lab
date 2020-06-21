@@ -1,5 +1,3 @@
-
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -8,6 +6,7 @@ import 'package:path/path.dart';
 import 'package:projq/screens/addproject.dart';
 import 'package:projq/services/database.dart';
 import 'package:provider/provider.dart';
+
 class ProjectItem extends StatelessWidget {
   final String id;
   final String title;
@@ -16,43 +15,35 @@ class ProjectItem extends StatelessWidget {
   final String affordability;
   final String members;
   final String docid;
-  
-  
-  
-   
-  
-   
-   ProjectItem({this.id,this.title,this.members,this.complexity,this.affordability,this.duration,this.docid});
-  
-   
-  
-  
-   
-  
-    
-  
+  final String imageurl;
+  ProjectItem(
+      {this.id,
+      this.title,
+      this.members,
+      this.complexity,
+      this.affordability,
+      this.duration,
+      this.docid,this.imageurl});
+
   Widget build(BuildContext context) {
+   
+   
     return SingleChildScrollView(
-        child: InkWell(
-      
-      onTap:()=> Navigator.of(context).pushNamed('/proj_detail_screen',arguments:docid),
-      child: Card(
-        margin: EdgeInsets.all(8),
-        color: Colors.white,
-        child:
-                  Row(
+      child: InkWell(
+        onTap: () => Navigator.of(context)
+            .pushNamed('/proj_detail_screen', arguments: docid),
+        child: Card(
+          margin: EdgeInsets.all(8),
+          color: Colors.white,
+          child: Row(
             children: <Widget>[
               SizedBox(width: 10),
-              
-              
-              
-            
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(8.0),
-                  child: Image.network(Provider.of<DatabaseService>(context).url
-                      ,
+                  child: Image.network(
+                      imageurl,
                       height: 100,
                       width: 80,
                       fit: BoxFit.cover,
@@ -77,12 +68,13 @@ class ProjectItem extends StatelessWidget {
                     Row(
                       children: <Widget>[
                         Icon(Icons.people),
-                      Text(members,style: TextStyle(
+                        Text(members,
+                            style: TextStyle(
                               fontWeight: FontWeight.bold,
-                              color: Colors.black,))
+                              color: Colors.black,
+                            ))
                       ],
                     ),
-                    
                     SizedBox(height: 30),
                     ButtonBar(
                       alignment: MainAxisAlignment.start,
@@ -102,11 +94,12 @@ class ProjectItem extends StatelessWidget {
                                 fontWeight: FontWeight.bold,
                                 color: Colors.black,
                               )),
-
-                              Icon(Icons.attach_money),
-                              Text(affordability,style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              color: Colors.black,))
+                          Icon(Icons.attach_money),
+                          Text(affordability,
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                color: Colors.black,
+                              ))
                         ])
                       ],
                     ),

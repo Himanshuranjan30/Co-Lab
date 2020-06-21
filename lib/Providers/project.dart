@@ -10,9 +10,10 @@ class Project with ChangeNotifier {
    String title;
    String description;
    String prequisites;
-  final File image;
+   File image;
  String contact;
   final String members;
+  String imageurl;
   
   final String duration;
   final String affordability;

@@ -1,3 +1,7 @@
+
+
+import 'dart:ffi';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
@@ -5,6 +9,7 @@ import 'package:flutter/foundation.dart';
 
 import 'package:projq/Providers/project.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:file/file.dart';
 
 import 'package:path/path.dart';
 import 'package:projq/screens/addproject.dart';
@@ -16,13 +21,16 @@ class DatabaseService extends ChangeNotifier{
   // collection reference
   String uid;
   String fileName;
-  var addproj = new AddProject();
+  DocumentReference docref;
+  
+  StorageReference firebaseStorageRef;
+  StorageUploadTask uploadTask;
 
     String url='';
   StorageTaskSnapshot storageTaskSnapshot;
 
   Future<Project> updateUserData(Project project) async {
-    firestoreInstance.collection('projects').add(
+   docref=await  firestoreInstance.collection('projects').add(
       {
         'id': project.id,
         'title': project.title,
@@ -33,21 +41,37 @@ class DatabaseService extends ChangeNotifier{
         'affordability': project.affordability,
         'prequisites': project.prequisites,
         'contact': project.contact,
+        'imageurl': 'https://bitsofco.de/content/images/2018/12/broken-1.png',
       },
     );
 
-     fileName = basename(project.image.path);
-    StorageReference firebaseStorageRef =
-        FirebaseStorage.instance.ref().child(fileName);
-    StorageUploadTask uploadTask = firebaseStorageRef.putFile(project.image);
     
+    
+    fileName = basename(project.image.path);
+     firebaseStorageRef =
+        FirebaseStorage.instance.ref().child(fileName);
+     uploadTask = firebaseStorageRef.putFile(project.image);
      
+
     String photourl =  await (await uploadTask.onComplete).ref.getDownloadURL();
     url= photourl.toString();
     notifyListeners();
-    
   }
 
+  
+  Future<Void> updatedata() async{
+
+  await  Firestore.instance
+  .collection('projects')
+    .document(docref.documentID)
+      .updateData({
+        'imageurl': url, 
+        
+      });
+      notifyListeners();
+  }
+
+  
   
 
   List<Project> fetchProjects(QuerySnapshot snapshot) {
