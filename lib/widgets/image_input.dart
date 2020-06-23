@@ -1,22 +1,17 @@
 
 import 'dart:io';
 
-import 'package:dropdown_formfield/dropdown_formfield.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'dart:io';
 
-import 'package:flutter/material.dart';
+
+
 import 'package:image_picker/image_picker.dart';
 import 'package:path/path.dart' as path;
 import 'package:path_provider/path_provider.dart' as syspaths;
 
-import 'package:path/path.dart';
-import '../Providers/project.dart';
-import '../widgets/image_input.dart';
-import '../services/database.dart';
+
 
 class ImageInput extends StatefulWidget {
   final Function onSelectImage;
@@ -35,7 +30,7 @@ class ImageInputState extends State<ImageInput> {
   
   Future<void> _takePicture() async {
     final imageFile = await ImagePicker.pickImage(
-      source: ImageSource.camera,
+      source: ImageSource.gallery,
       maxWidth: 600,
     );
     if (imageFile == null) {
@@ -78,7 +73,7 @@ class ImageInputState extends State<ImageInput> {
         Expanded(
           child: FlatButton.icon(
             icon: Icon(Icons.camera),
-            label: Text('Take Picture'),
+            label: Text('Add Project Snapshot'),
             textColor: Theme.of(context).primaryColor,
             onPressed: _takePicture,
           ),

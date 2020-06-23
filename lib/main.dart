@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:projq/Providers/project.dart';
 import 'package:projq/Providers/projects.dart';
 import 'package:projq/screens/addproject.dart';
+import 'package:projq/screens/fav_detailsscreen.dart';
 import 'package:projq/screens/wrapper.dart';
 import 'package:projq/services/auth.dart';
 import 'package:projq/services/database.dart';
@@ -31,6 +32,7 @@ class MyApp extends StatelessWidget {
                   routes: {
                     '/proj_detail_screen': (ctx) => ProjectDetailScreen(),
                     '/proj_add_screen': (ctx) => AddProject(),
+                    '/fav_detail_screen': (ctx)=> FavDetailScreen(),
                   },
                 )));
   }

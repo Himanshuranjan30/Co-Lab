@@ -1,18 +1,15 @@
 import 'dart:io';
 
 import 'package:dropdown_formfield/dropdown_formfield.dart';
-import 'package:firebase_storage/firebase_storage.dart';
+
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'dart:io';
 
-import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:path/path.dart' as path;
-import 'package:path_provider/path_provider.dart' as syspaths;
 
-import 'package:path/path.dart';
+
+
+
 import 'package:projq/shared/loading.dart';
 import 'package:provider/provider.dart';
 import '../Providers/project.dart';
@@ -83,8 +80,8 @@ class AddProjectState extends State<AddProject> {
               onPressed: () async {
                 finalproj=returnproj();
                  await Provider.of<DatabaseService>(context,listen: false).updateUserData(finalproj);
-                 Loading();
-                 Provider.of<DatabaseService>(context,listen: false).updatedata();
+                 
+                  Provider.of<DatabaseService>(context,listen: false).updatedata();
                 Navigator.pop(context);
               })
         ],

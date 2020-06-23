@@ -4,17 +4,16 @@ import 'dart:ffi';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 
 import 'package:projq/Providers/project.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:file/file.dart';
+
 
 import 'package:path/path.dart';
-import 'package:projq/screens/addproject.dart';
-import 'package:projq/screens/category_project_screen.dart';
-import 'package:projq/widgets/image_input.dart';
+
 
 class DatabaseService extends ChangeNotifier{
   final firestoreInstance = Firestore.instance;
@@ -25,13 +24,17 @@ class DatabaseService extends ChangeNotifier{
   
   StorageReference firebaseStorageRef;
   StorageUploadTask uploadTask;
+  FirebaseAuth firebase;
 
     String url='';
   StorageTaskSnapshot storageTaskSnapshot;
 
   Future<Project> updateUserData(Project project) async {
+   
+   FirebaseUser user = await FirebaseAuth.instance.currentUser();
    docref=await  firestoreInstance.collection('projects').add(
       {
+        'uid':user.uid,
         'id': project.id,
         'title': project.title,
         'description': project.description,
@@ -57,6 +60,8 @@ class DatabaseService extends ChangeNotifier{
     url= photourl.toString();
     notifyListeners();
   }
+
+  
 
   
   Future<Void> updatedata() async{
@@ -92,7 +97,7 @@ class DatabaseService extends ChangeNotifier{
   // get brews stream
   //
   Stream<List<Project>> get projects {
-    var firebaseUser = FirebaseAuth.instance.currentUser();
+   
     final CollectionReference projectCollection =
         Firestore.instance.collection('projects');
     return projectCollection.snapshots().map(fetchProjects);

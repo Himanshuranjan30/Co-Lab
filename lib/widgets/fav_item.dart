@@ -1,9 +1,10 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 
 
-class ProjectItem extends StatelessWidget {
+class FavItem extends StatelessWidget {
   final String id;
   final String title;
   final String duration;
@@ -12,7 +13,7 @@ class ProjectItem extends StatelessWidget {
   final String members;
   final String docid;
   final String imageurl;
-  ProjectItem(
+  FavItem(
       {this.id,
       this.title,
       this.members,
@@ -20,6 +21,12 @@ class ProjectItem extends StatelessWidget {
       this.affordability,
       this.duration,
       this.docid,this.imageurl});
+     
+     String uid;
+      Future returnuid() async {
+    FirebaseUser user = await FirebaseAuth.instance.currentUser();
+    uid = user.uid;
+  }
 
   Widget build(BuildContext context) {
    
@@ -27,7 +34,7 @@ class ProjectItem extends StatelessWidget {
     return SingleChildScrollView(
       child: InkWell(
         onTap: () => Navigator.of(context)
-            .pushNamed('/proj_detail_screen', arguments: docid),
+            .pushNamed('/fav_detail_screen', arguments: id),
         child: Card(
           margin: EdgeInsets.all(20),
           color: Colors.white,

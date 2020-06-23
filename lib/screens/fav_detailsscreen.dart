@@ -1,5 +1,3 @@
-import 'dart:ffi';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -10,24 +8,15 @@ import 'package:projq/services/database.dart';
 import 'package:projq/shared/loading.dart';
 import 'package:provider/provider.dart';
 
-class ProjectDetailScreen extends StatefulWidget {
-  static const routeName = '/proj_detail_screen';
 
-  @override
-  _ProjectDetailScreenState createState() => _ProjectDetailScreenState();
-}
 
-class _ProjectDetailScreenState extends State<ProjectDetailScreen> {
-  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
+class FavDetailScreen extends StatelessWidget {
+  static const routeName = '/fav_detail_screen';
 
-  void _showScaffold(String message) {
-    _scaffoldKey.currentState.showSnackBar(SnackBar(
-      content: Text(message),
-    ));
-  }
-  String id;
+  
+  
 
-  Project selectedproj;
+  
 
   String finalurl;
 
@@ -39,29 +28,23 @@ class _ProjectDetailScreenState extends State<ProjectDetailScreen> {
     FirebaseUser user = await FirebaseAuth.instance.currentUser();
     uid = user.uid;
   }
-
+String id;
   final firestoreInstance = Firestore.instance;
 
   final FirebaseStorage storage =
       FirebaseStorage(storageBucket: 'gs://projfire-d9f08.appspot.com');
 
-     
-      
-
-
   Widget build(BuildContext context) {
     returnuid();
     id = ModalRoute.of(context).settings.arguments;
-    imagename = Provider.of<DatabaseService>(context).fileName;
-    
-
+  
 
     return StreamBuilder(
         stream:
-            Firestore.instance.collection('projects').document(id).snapshots(),
+            firestoreInstance.collection(uid).document(id).snapshots(),
         builder: (context, snapshot) {
           if (!snapshot.hasData) {
-            Text('loading....');
+            Text('loading...');
           }
 
           return Scaffold(
@@ -69,20 +52,19 @@ class _ProjectDetailScreenState extends State<ProjectDetailScreen> {
                 backgroundColor: Colors.indigo,
                 title: Text(snapshot.data['title']),
                 actions: <Widget>[
-                  uid == snapshot.data['uid']
-                      ? IconButton(
+                  IconButton(
                           icon: Icon(
                             Icons.delete,
                           ),
                           onPressed: () async {
                             Navigator.pop(context);
                             await Firestore.instance
-                                .collection('projects')
+                                .collection(uid)
                                 .document(id)
                                 .delete();
-                            storage.ref().child(imagename).delete();
+                            
                           })
-                      : Container()
+                      
                 ],
               ),
               body: SingleChildScrollView(
@@ -109,40 +91,7 @@ class _ProjectDetailScreenState extends State<ProjectDetailScreen> {
                       SizedBox(
                         width: 20,
                       ),
-                      FloatingActionButton(
-                        child: Icon(Icons.favorite),
-                        onPressed: () async {
-                          
-                          
-                         
-                          await firestoreInstance
-                              .collection(uid)
-                              .document(snapshot.data['id'])
-                              .setData(
-                            {
-                              
-                              'id': snapshot.data['id'],
-                              'title': snapshot.data['title'],
-                              'description': snapshot.data['description'],
-                              'duration': snapshot.data['duration'],
-                              'members': snapshot.data['members'],
-                              'complexity': snapshot.data['complexity'],
-                              'affordability': snapshot.data['affordability'],
-                              'prequisites': snapshot.data['prequisites'],
-                              'contact': snapshot.data['contact'],
-                              'imageurl': snapshot.data['imageurl'],
-                            },
-                          );
-                          
-                           showDialog(
-      context: context,
-      builder: (_){
-        return AlertDialog(title: Text('added to favs!'),);
-      },
-    );
-                        },
-                        backgroundColor: Colors.indigo,
-                      )
+                      
                     ],
                   ),
                   Padding(
