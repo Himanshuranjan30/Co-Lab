@@ -8,14 +8,7 @@ import 'package:projq/services/database.dart';
 import 'package:projq/shared/loading.dart';
 import 'package:provider/provider.dart';
 
-
-
-class FavDetailScreen extends StatelessWidget {
-  static const routeName = '/fav_detail_screen';
-
-  
-  
-
+class FavScreen extends StatelessWidget {
   
 
   String finalurl;
@@ -28,24 +21,23 @@ class FavDetailScreen extends StatelessWidget {
     FirebaseUser user = await FirebaseAuth.instance.currentUser();
     uid = user.uid;
   }
-String id;
+
+  String docid;
   final firestoreInstance = Firestore.instance;
 
-  final FirebaseStorage storage =
-      FirebaseStorage(storageBucket: 'gs://projfire-d9f08.appspot.com');
-
+  
   Widget build(BuildContext context) {
     returnuid();
-    id = ModalRoute.of(context).settings.arguments;
-  
+    docid = ModalRoute.of(context).settings.arguments;
 
     return StreamBuilder(
-        stream:
-            firestoreInstance.collection(uid).document(id).snapshots(),
+        stream: Firestore.instance.collection(uid).document(docid).snapshots(),
         builder: (context, snapshot) {
-          if (!snapshot.hasData) {
-            Text('loading...');
-          }
+           if (snapshot.connectionState == ConnectionState.active) {
+             
+          
+          if (snapshot.hasData) {
+            
 
           return Scaffold(
               appBar: AppBar(
@@ -53,18 +45,16 @@ String id;
                 title: Text(snapshot.data['title']),
                 actions: <Widget>[
                   IconButton(
-                          icon: Icon(
-                            Icons.delete,
-                          ),
-                          onPressed: () async {
-                            Navigator.pop(context);
-                            await Firestore.instance
-                                .collection(uid)
-                                .document(id)
-                                .delete();
-                            
-                          })
-                      
+                      icon: Icon(
+                        Icons.delete,
+                      ),
+                      onPressed: () async {
+                        Navigator.pop(context);
+                        await Firestore.instance
+                            .collection(uid)
+                            .document(docid)
+                            .delete();
+                      })
                 ],
               ),
               body: SingleChildScrollView(
@@ -91,7 +81,6 @@ String id;
                       SizedBox(
                         width: 20,
                       ),
-                      
                     ],
                   ),
                   Padding(
@@ -213,6 +202,8 @@ String id;
                   ),
                 ]),
               ));
-        });
+         } }return Scaffold(
+           body: Center(
+           child: Loading(),));});
   }
 }

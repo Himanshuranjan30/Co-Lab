@@ -34,7 +34,7 @@ class _SignInState extends State<SignIn> {
       appBar: AppBar(
         backgroundColor: Colors.indigo[400],
         elevation: 0.0,
-        title: Text('Sign in to ProjectMate'),
+        title: Text('Sign in to Co|Lab'),
         actions: <Widget>[
           FlatButton.icon(
             icon: Icon(Icons.person),
@@ -49,6 +49,8 @@ class _SignInState extends State<SignIn> {
           key: _formKey,
           child: Column(
             children: <Widget>[
+              Image.network('https://scontent.fccu3-1.fna.fbcdn.net/v/t1.0-9/12998741_251965638485550_8520180394980197306_n.png?_nc_cat=109&_nc_sid=dd9801&_nc_ohc=PwemK5Bfx6gAX8lcT1k&_nc_ht=scontent.fccu3-1.fna&oh=59f0bba981b4f9e9a4a79add0f76a676&oe=5F17B284'),
+              
               SizedBox(height: 20.0),
               TextFormField(
                 decoration: textInputDecoration.copyWith(hintText: 'email'),

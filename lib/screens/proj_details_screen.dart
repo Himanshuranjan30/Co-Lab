@@ -11,7 +11,7 @@ import 'package:projq/shared/loading.dart';
 import 'package:provider/provider.dart';
 
 class ProjectDetailScreen extends StatefulWidget {
-  static const routeName = '/proj_detail_screen';
+  
 
   @override
   _ProjectDetailScreenState createState() => _ProjectDetailScreenState();
@@ -25,7 +25,8 @@ class _ProjectDetailScreenState extends State<ProjectDetailScreen> {
       content: Text(message),
     ));
   }
-  String id;
+  String fid;
+ String id;
 
   Project selectedproj;
 
@@ -51,7 +52,10 @@ class _ProjectDetailScreenState extends State<ProjectDetailScreen> {
 
   Widget build(BuildContext context) {
     returnuid();
-    id = ModalRoute.of(context).settings.arguments;
+    final routeArgs = ModalRoute.of(context).settings.arguments as Map<String,String>;
+    id= routeArgs['docid'];
+    fid= routeArgs['id'];
+
     imagename = Provider.of<DatabaseService>(context).fileName;
     
 
@@ -61,8 +65,12 @@ class _ProjectDetailScreenState extends State<ProjectDetailScreen> {
             Firestore.instance.collection('projects').document(id).snapshots(),
         builder: (context, snapshot) {
           if (!snapshot.hasData) {
-            Text('loading....');
+         
+         Text('loading');
+         
           }
+        
+          
 
           return Scaffold(
               appBar: AppBar(
@@ -82,7 +90,7 @@ class _ProjectDetailScreenState extends State<ProjectDetailScreen> {
                                 .delete();
                             storage.ref().child(imagename).delete();
                           })
-                      : Container()
+                      : Container(width: 0,height: 0,)
                 ],
               ),
               body: SingleChildScrollView(
@@ -117,7 +125,7 @@ class _ProjectDetailScreenState extends State<ProjectDetailScreen> {
                          
                           await firestoreInstance
                               .collection(uid)
-                              .document(snapshot.data['id'])
+                              .document(fid)
                               .setData(
                             {
                               

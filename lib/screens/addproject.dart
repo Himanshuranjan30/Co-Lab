@@ -71,7 +71,7 @@ class AddProjectState extends State<AddProject> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.indigo,
-        title: Text('Add a product'),
+        title: Text('Add a project'),
         actions: <Widget>[
           IconButton(
               icon: Icon(

@@ -32,7 +32,7 @@ class MyApp extends StatelessWidget {
                   routes: {
                     '/proj_detail_screen': (ctx) => ProjectDetailScreen(),
                     '/proj_add_screen': (ctx) => AddProject(),
-                    '/fav_detail_screen': (ctx)=> FavDetailScreen(),
+                    '/fav_detail_screen': (ctx)=> FavScreen(),
                   },
                 )));
   }

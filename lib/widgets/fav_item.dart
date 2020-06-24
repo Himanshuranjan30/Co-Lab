@@ -5,7 +5,7 @@ import 'package:flutter/rendering.dart';
 
 
 class FavItem extends StatelessWidget {
-  final String id;
+ String id;
   final String title;
   final String duration;
   final String complexity;
@@ -34,7 +34,7 @@ class FavItem extends StatelessWidget {
     return SingleChildScrollView(
       child: InkWell(
         onTap: () => Navigator.of(context)
-            .pushNamed('/fav_detail_screen', arguments: id),
+            .pushNamed('/fav_detail_screen', arguments: docid),
         child: Card(
           margin: EdgeInsets.all(20),
           color: Colors.white,

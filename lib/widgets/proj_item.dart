@@ -27,7 +27,7 @@ class ProjectItem extends StatelessWidget {
     return SingleChildScrollView(
       child: InkWell(
         onTap: () => Navigator.of(context)
-            .pushNamed('/proj_detail_screen', arguments: docid),
+            .pushNamed('/proj_detail_screen', arguments: {'docid':docid,'id':id}),
         child: Card(
           margin: EdgeInsets.all(20),
           color: Colors.white,

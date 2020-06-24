@@ -33,14 +33,14 @@ class _TabsScreenState extends State<TabsScreen> {
               },
             ),
             FlatButton.icon(
-              icon: Icon(Icons.people),
+              icon: Icon(Icons.input),
               onPressed: () async {
                 await _auth.signOut();
               },
               label: Text('LogOut'),
             )
           ],
-          title: Text('ProjectMate'),
+          title: Text('Co|Lab'),
           bottom: TabBar(
             tabs: <Widget>[
               Tab(
